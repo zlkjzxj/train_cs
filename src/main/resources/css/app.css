@@ -1,0 +1,42 @@
+/*
+.split-pane{
+    max-width: content-box;
+}
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 1; !* 0 3 0 3 *!
+}*/
+
+.main {
+    /*-fx-background-image: url("main_bg.jpg");*/
+    -fx-background-color: #e6e6e6;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+    -fx-font-size: 14;
+    -fx-font-family: "Microsoft Himalaya";
+}
+
+/**分割线样式*/
+.separator {
+    /*-fx-background-color: #e79423;*/
+    /*-fx-background-radius: 1;*/
+    /*-fx-orientation: ;*/
+}
+
+.sd {
+    -fx-border-color: red;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10;
+}
+
+.imageView {
+    -fx-border-color: red;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10;
+}
+
+.qrxx {
+    -fx-fill: #f21008;
+    -fx-font-size: 16;
+}

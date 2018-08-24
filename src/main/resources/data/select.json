@@ -1,0 +1,119 @@
+[
+  {
+    "name": "乌鲁木齐车队",
+    "value": "wlmq",
+    "cz": [
+      {
+        "name": "乌1组",
+        "value": "wlmq-1",
+        "cc": [
+          {
+            "name": "K2812",
+            "value": "K2812",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          },
+          {
+            "name": "K2851",
+            "value": "K2851",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          }
+        ]
+      },
+      {
+        "name": "乌2组",
+        "value": "wlmq-2",
+        "cc": [
+          {
+            "name": "G258",
+            "value": "G258",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          },
+          {
+            "name": "G286",
+            "value": "G286",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "兰州车队",
+    "value": "lz",
+    "cz": [
+      {
+        "name": "兰1组",
+        "value": "lz-1",
+        "cc": [
+          {
+            "name": "K2812",
+            "value": "K2812",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          },
+          {
+            "name": "K2851",
+            "value": "K2851",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          }
+        ]
+      },
+      {
+        "name": "兰2组",
+        "value": "lz-2",
+        "cc": [
+          {
+            "name": "G258",
+            "value": "G258",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          },
+          {
+            "name": "G286",
+            "value": "G286",
+            "cx": {
+              "value": "1-1",
+              "value": "1-2",
+              "value": "2-1",
+              "value": "2-2"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
+
