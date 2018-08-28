@@ -3,6 +3,7 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100%;
     -fx-font-family: "Microsoft Himalaya";
+    -fx-text-fill: red;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
 }

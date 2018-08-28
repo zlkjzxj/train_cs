@@ -8,13 +8,30 @@
 
 .main {
     /*-fx-background-image: url("main_bg.jpg");*/
-    -fx-background-color: #e6e6e6;
+    -fx-pref-height: 1024;
+    -fx-pref-width: 1280;
+    /*-fx-background-color: #BDFFF3;*/
+    /*-fx-background-image: url("../image/xx.jpg");*/
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100%;
+    /*-fx-background-size: stretch stretch;*/
+    -fx-background-position: center center;
+    -fx-font-size: 12;
+    -fx-font-family: "Microsoft Yahei";
+}
+
+.title {
+    -fx-font-size: 40px;
+    -fx-text-fill: red;
+    -fx-font-family: "Microsoft Himalaya";
+    -fx-background-image: url("../image/login_bg.jpg");
+    -fx-background-repeat: no-repeat;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
-    -fx-font-size: 14;
-    -fx-font-family: "Microsoft Himalaya";
+}
+
+.mainGrid {
+
 }
 
 /**分割线样式*/

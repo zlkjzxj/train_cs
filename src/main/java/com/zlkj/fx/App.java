@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class App extends Application {
 
@@ -20,7 +21,31 @@ public class App extends Application {
         //设置窗口的图标.
         primaryStage.getIcons().add(new Image(
                 App.class.getClassLoader().getResourceAsStream("image/icon.jpg")));
+        //窗口最大化
+//        primaryStage.setMaximized(true);
+        //窗口始终显示在其他窗口上
+//        primaryStage.setAlwaysOnTop(true);
+        //窗口全屏，ESC退出
+//        primaryStage.setFullScreen(true);
+        //最小化图标不可见
+        primaryStage.setIconified(false);
+        //设置窗口风格
+        /**
+         * StageStyle有几种类型
+         1) DECORATED——白色背景，带有最小化/最大化/关闭等有操作系统平台装饰（ 默认设置）
+
+         2) UNDECORATED——白色背景，没有操作系统平台装饰
+
+         3) TRANSPARENT——透明背景，没有操作系统平台装饰
+
+         4) UTILITY——白色背景，只有关闭操作系统平台装饰
+
+         5) UNIFIED——有操作系统平台装饰，消除装饰和内容之间的边框，内容背景和边框背景一致，（但要视平台支持），可
+         */
+        primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.show();
+        //监听程序的关闭时间（右上角的红xx）
+        primaryStage.setOnCloseRequest(new WindowsCloseEvent(primaryStage));
 
 //        //menu 按钮组
 //        HBox hbox = new HBox(8);// space

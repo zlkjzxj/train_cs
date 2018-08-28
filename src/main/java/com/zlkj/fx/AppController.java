@@ -3,28 +3,31 @@ package com.zlkj.fx;
 import com.zlkj.bean.DiskBean;
 import com.zlkj.bean.DiskMapBean;
 import com.zlkj.commons.Constant;
+import com.zlkj.threads.HandlerThreadsPool;
+import com.zlkj.threads.OutPutHandler;
 import com.zlkj.util.AlertInfo;
 import com.zlkj.util.CheckEquType;
 import com.zlkj.util.ReadWriteProperties;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+
+import static com.zlkj.threads.InitThread.createThreadPool;
 
 public class AppController {
     @FXML
@@ -34,7 +37,7 @@ public class AppController {
     @FXML
     private Tab initTab;
     @FXML
-    private Tab outdataTab;
+    private GridPane gridPane;
     @FXML
     private ChoiceBox cd;
     @FXML
@@ -45,8 +48,6 @@ public class AppController {
     private ChoiceBox cx;
     @FXML
     private Label lcxx;
-    @FXML
-    private Text qrxx;
     @FXML
     private ImageView initImg;
 
@@ -66,7 +67,7 @@ public class AppController {
     @FXML
     private Label totalSpace0;
     @FXML
-    private Label freeSpace0;
+    private Label state0;
     @FXML
     private Label trainInfo0;
     @FXML
@@ -76,7 +77,7 @@ public class AppController {
     @FXML
     private Label totalSpace1;
     @FXML
-    private Label freeSpace1;
+    private Label state1;
     @FXML
     private Label trainInfo1;
     @FXML
@@ -86,7 +87,7 @@ public class AppController {
     @FXML
     private Label totalSpace2;
     @FXML
-    private Label freeSpace2;
+    private Label state2;
     @FXML
     private Label trainInfo2;
     @FXML
@@ -108,16 +109,20 @@ public class AppController {
     //确认是否初始化的时候设置为开关
     private static boolean isInit = false;
 
+    private HandlerThreadsPool handlerThreadsPool;
+
     public AppController() {
 
     }
 
     @FXML
     public void initialize() throws Exception {
-        SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        selectionModel.select(outdataTab); //select by object
-        selectionModel.select(1); //select by index starting with 0
-        selectionModel.clearSelection(0);//clear your selection
+        //开启线程池
+        handlerThreadsPool = createThreadPool();
+//        SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+//        selectionModel.select(outdataTab); //select by object
+//        selectionModel.select(1); //select by index starting with 0
+//        selectionModel.clearSelection(0);//clear your selection
         /*Thread thread = new Thread(InitThread.getInstance());
         InitThread initThread = InitThread.getInstance();
         initThread.setFlag(true);
@@ -126,54 +131,24 @@ public class AppController {
         System.out.println(disks);*/
 //        Thread thread = new Thread(new AppController());
 //        thread.start();
+        //我想动态的生成gridpane里面的元素
+        for (int i = 0; i < 4; i++) {//4列
+            for (int j = 0; j < 5; j++) {//5行
+                Label label = new Label("第" + j + "行，第" + i + "列");
+                label.setPrefWidth(250.0);
+                label.setPrefHeight(200.0);
+                label.setId("fuck" + i+j);
+                gridPane.add(label, i, j);
+            }
+        }
+        Scene scene = mainPane.getScene();
+        Label label = (Label) scene.lookup("#fuck00");
+        label.setText("nimabi");
         allDisks.put(0, "0");
         allDisks.put(1, "0");
         allDisks.put(2, "0");
-        this.getDisks();
-        this.outData2();
-        final String[] cds = new String[]{"兰州车队", "乌鲁木齐车队", "西安车队"};
-        final String[] cz0 = new String[]{"兰1组", "兰2组", "兰3组"};
-        final String[] cz1 = new String[]{"乌1组", "乌2组", "乌3组"};
-        final String[] cz2 = new String[]{"西1组", "西2组", "西3组"};
-        final String[] ccs = new String[]{"G2812", "G55", "G5812"};
-        final String[] cxs = new String[]{"1-1", "1-2", "2-1"};
-//        Map map = JsonFile.readJsonFile();
-        cd.setItems(FXCollections.observableArrayList(cds));
-        cd.getSelectionModel().selectedIndexProperty()
-                .addListener(new ChangeListener<Number>() {
-                    public void changed(ObservableValue ov, Number value, Number new_value) {
-                        System.out.println(new_value);//需要的值
-                        if (new_value.toString().equals("0")) {
-                            cz.setItems(FXCollections.observableArrayList(cz0));
-                        } else if (new_value.toString().equals("1")) {
-                            cz.setItems(FXCollections.observableArrayList(cz1));
-                        } else if (new_value.toString().equals("2")) {
-                            cz.setItems(FXCollections.observableArrayList(cz2));
-                        }
-                        label1.setText(cds[new_value.intValue()]);
-                    }
-                });
-        cz.getSelectionModel().selectedIndexProperty()
-                .addListener(new ChangeListener<Number>() {
-                    public void changed(ObservableValue ov, Number value, Number new_value) {
-                        cc.setItems(FXCollections.observableArrayList(ccs));
-                        label2.setText(cz0[new_value.intValue()]);
-                    }
-                });
-        cc.getSelectionModel().selectedIndexProperty()
-                .addListener(new ChangeListener<Number>() {
-                    public void changed(ObservableValue ov, Number value, Number new_value) {
-                        cx.setItems(FXCollections.observableArrayList(cxs));
-                        label3.setText(ccs[new_value.intValue()]);
-                    }
-                });
-        cx.getSelectionModel().selectedIndexProperty()
-                .addListener(new ChangeListener<Number>() {
-                    public void changed(ObservableValue ov, Number value, Number new_value) {
-                        label4.setText(cxs[new_value.intValue()]);
-                        lcxx.setText(label1.getText() + "-" + label2.getText() + "-" + label3.getText() + "-" + label4.getText());
-                    }
-                });
+//        this.getDisks();
+//        this.outData2();
 
     }
 
@@ -356,19 +331,19 @@ public class AppController {
                                     case 0:
                                         imageView0.setImage(new Image("image/train1.png"));
                                         totalSpace0.setText(disks.get(i).getTotalSpace());
-                                        freeSpace0.setText(disks.get(i).getFreeSpace());
+//                                        freeSpace0.setText(disks.get(i).getFreeSpace());
                                         trainInfo0.setText(disks.get(i).getDiskid());
                                         break;
                                     case 1:
                                         imageView1.setImage(new Image("image/train1.png"));
                                         totalSpace1.setText(disks.get(i).getTotalSpace());
-                                        freeSpace1.setText(disks.get(i).getFreeSpace());
+//                                        freeSpace1.setText(disks.get(i).getFreeSpace());
                                         trainInfo1.setText("xxxxxxxx");
                                         break;
                                     case 2:
                                         imageView2.setImage(new Image("image/train1.png"));
                                         totalSpace2.setText(disks.get(i).getTotalSpace());
-                                        freeSpace2.setText(disks.get(i).getFreeSpace());
+//                                        freeSpace2.setText(disks.get(i).getFreeSpace());
                                         trainInfo2.setText("xxxxxxxx");
                                         break;
                                 }
@@ -531,14 +506,14 @@ public class AppController {
             case 0:
                 imageView0.setImage(new Image("image/train2.png"));
                 totalSpace0.setText("");
-                freeSpace0.setText("");
+                state0.setText("等待中");
                 trainInfo0.setText("");
                 progressBar0.setProgress(0.00);
                 break;
             case 1:
                 imageView1.setImage(new Image("image/train2.png"));
                 totalSpace1.setText("");
-                freeSpace1.setText("");
+                state1.setText("等待中");
                 trainInfo1.setText("");
                 progressBar1.setProgress(0.00);
 
@@ -546,38 +521,48 @@ public class AppController {
             case 2:
                 imageView2.setImage(new Image("image/train2.png"));
                 totalSpace2.setText("");
-                freeSpace2.setText("");
+                state2.setText("等待中");
                 trainInfo2.setText("");
                 progressBar2.setProgress(0.00);
                 break;
         }
     }
 
+    /**
+     * 设备确认正确之后开始修改页面样式，启动数据导出
+     *
+     * @param key
+     * @param trainInfo
+     * @param diskBean
+     */
     public void updateAddStyle(int key, String trainInfo, DiskBean diskBean) {
         switch (key) {
             case 0:
                 imageView0.setImage(new Image("image/train1.png"));
-                totalSpace0.setText(diskBean.getTotalSpace());
-                freeSpace0.setText(diskBean.getFreeSpace());
+                totalSpace0.setText(diskBean.getTotalSpace() + "可用/" + diskBean.getFreeSpace() + "剩余");
+                state0.setText("导出中");
                 trainInfo0.setText(trainInfo);
                 //启动线程给progressBar赋值
-                updateProgress(progressBar0, diskBean);
+                beginOut(progressBar0, state0, diskBean);
+//                updateProgress(progressBar0, diskBean);
                 ProgressBars.put(0, progressBar0);
                 break;
             case 1:
                 imageView1.setImage(new Image("image/train1.png"));
                 totalSpace1.setText(diskBean.getTotalSpace());
-                freeSpace1.setText(diskBean.getFreeSpace());
+                state1.setText(diskBean.getFreeSpace());
                 trainInfo1.setText(trainInfo);
-                updateProgress(progressBar1, diskBean);
+                beginOut(progressBar1, state1, diskBean);
+//                updateProgress(progressBar1, diskBean);
                 ProgressBars.put(0, progressBar1);
                 break;
             case 2:
                 imageView2.setImage(new Image("image/train1.png"));
                 totalSpace2.setText(diskBean.getTotalSpace());
-                freeSpace2.setText(diskBean.getFreeSpace());
+                state2.setText(diskBean.getFreeSpace());
                 trainInfo2.setText(trainInfo);
-                updateProgress(progressBar2, diskBean);
+                beginOut(progressBar2, state2, diskBean);
+//                updateProgress(progressBar2, diskBean);
                 ProgressBars.put(0, progressBar2);
                 break;
         }
@@ -626,6 +611,16 @@ public class AppController {
             }
         }
         return keyList;
+    }
+
+    //假的进度条
+    public void beginOut(final ProgressBar progressBar, Label label, DiskBean diskBean) {
+        if (diskBean.getTrainInfo().equals("")) {//判断是否有类车编号，如果没有则提示，有则自动导入
+            AlertInfo.f_alert_confirmDialog(mainPane, tabPane, initTab, "设备尚未初始化！,是否初始化", isInit);
+        } else {
+            handlerThreadsPool.execute(new OutPutHandler(diskBean.getDiskid(), progressBar, label));
+        }
+
     }
 
     //假的进度条
